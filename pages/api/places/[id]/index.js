@@ -1,5 +1,6 @@
 import dbConnect from "../../../../db/connect";
 import Place from "../../../../db/models/Place";
+import Comment from "../../../../db/models/Comment";
 
 export default async function handler(request, response) {
   await dbConnect(); // initializing the connection
@@ -21,6 +22,12 @@ export default async function handler(request, response) {
     case "PATCH":
       await Place.findByIdAndUpdate(id, { $set: request.body });
       return response.status(200).json({ status: "Place updated" });
+
+    case "POST":
+      const newComment = request.body;
+      await Comment.create(newComment);
+      const updatedComment = [...existingComments, { ...newComment, id }];
+      return response.status(201).json({ status: "Comment created." });
 
     case "DELETE":
       await Place.findByIdAndDelete(id);

@@ -16,22 +16,23 @@ export default function CreatePlacePage() {
   async function addPlace(place) {
     console.log("place", place);
 
-    const formData = new FormData(place.target);
-    const placeData = Object.fromEntries(formData);
+    // const formData = new FormData(place.target);
+    // const placeData = Object.fromEntries(formData);
 
     const response = await fetch("/api/places", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(placeData),
+      body: JSON.stringify(place),
     });
 
     if (response.ok) {
-      mutate();
+      // mutate();
+      router.push("/");
     }
 
-    router.push("/");
+    // router.push("/");
   }
 
   return (

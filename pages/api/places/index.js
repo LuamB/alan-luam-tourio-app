@@ -7,11 +7,7 @@ export default async function handler(request, response) {
   if (request.method === "GET") {
     const places = await Place.find();
     return response.status(200).json(places);
-  } else {
-    return response.status(405).json({ message: "Method not allowed" });
-  }
-
-  if (request.method === "POST") {
+  } else if (request.method === "POST") {
     try {
       const placeData = request.body;
       const newPlace = await Place.create(placeData);
@@ -30,6 +26,8 @@ export default async function handler(request, response) {
       return response.status(500).json({ message: "Something went wrong" }); // other server errors
     }
     // Respond to other methods, likely '405 - Method Not Allowed'
+    return response.status(405).json({ message: "Method not allowed" });
+  } else {
     return response.status(405).json({ message: "Method not allowed" });
   }
 }
