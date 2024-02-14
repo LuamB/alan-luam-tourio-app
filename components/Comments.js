@@ -1,8 +1,12 @@
 import styled from "styled-components";
 import { FormContainer, Input, Label } from "./Form";
 import { StyledButton } from "./StyledButton.js";
+import { useState } from "react";
 
 export default function Comments({ locationName, comments }) {
+  console.log("comments: ", comments);
+  const [commentData, setCommentData] = useState({ name: "", text: "" });
+
   const Article = styled.article`
     display: flex;
     flex-direction: column;
@@ -17,13 +21,33 @@ export default function Comments({ locationName, comments }) {
     }
   `;
 
-  function handleSubmitComment(e) {
+  async function handleSubmitComment(e) {
     e.preventDefault();
+    if (commentData.name.trim() === "" && commentData.text.trim() === "") {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/places/${id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(commentData),
+      });
+
+      if (response.ok) {
+        setCommentData({ name: "", text: "" });
+      }
+    } catch (e) {
+      console.error("Error submitting comment: ", e);
+    }
+
+    // const commentFormData = new FormData(comment.target);
+    // const placeData = Object.fromEntries(commentFormData);
   }
 
   return (
     <Article>
-      <FormContainer onSubmit={handleSubmitComment}>
+      <FormContainer onSubmit={() => handleSubmitComment}>
         <Label htmlFor="name">Your Name</Label>
         <Input type="text" name="name" placeholder="name" />
         <Label htmlFor="comment">Your Comment</Label>
