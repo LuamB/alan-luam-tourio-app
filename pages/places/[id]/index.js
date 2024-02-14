@@ -39,6 +39,7 @@ export default function DetailsPage() {
     isLoading,
     error,
   } = useSWR(id ? `/api/places/${id}` : null); // if id is available, fetch the data, otherwise return null for id
+  console.log("data: ", data);
 
   // old version hidden out below:
   // if (!isReady || isLoading || error) return <h2>Loading...</h2>;
@@ -56,7 +57,7 @@ export default function DetailsPage() {
       </Link>
       <ImageContainer>
         <StyledImage
-          src={data.place.image}
+          src={data?.place.image}
           priority
           fill
           sizes="(max-width: 768px) 100vw,
@@ -66,12 +67,12 @@ export default function DetailsPage() {
         />
       </ImageContainer>
       <h2>
-        {data.place.name}, {data.place.location}
+        {data?.place.name}, {data?.place.location}
       </h2>
-      <Link href={data.place.mapURL} passHref legacyBehavior>
+      <Link href={data?.place.mapURL} passHref legacyBehavior>
         <StyledLocationLink>Location on Google Maps</StyledLocationLink>
       </Link>
-      <p>{data.place.description}</p>
+      <p>{data?.place.description}</p>
       <ButtonContainer>
         <Link href={`/places/${id}/edit`} passHref legacyBehavior>
           <StyledLink>Edit</StyledLink>
@@ -80,7 +81,10 @@ export default function DetailsPage() {
           Delete
         </StyledButton>
       </ButtonContainer>
-      <Comments locationName={data.place.name} comments={data.comments} />
+      <Comments
+        locationName={data?.place.name}
+        comments={data?.place.comments}
+      />
     </>
   );
 }
