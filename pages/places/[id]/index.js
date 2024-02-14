@@ -38,7 +38,7 @@ export default function DetailsPage() {
     data,
     isLoading,
     error,
-  } = useSWR(`/api/places/${id}`);
+  } = useSWR(id ? `/api/places/${id}` : null); // if id is available, fetch the data, otherwise return null for id
 
   // old version hidden out below:
   // if (!isReady || isLoading || error) return <h2>Loading...</h2>;
