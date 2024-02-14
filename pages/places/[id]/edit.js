@@ -15,8 +15,8 @@ export default function EditPage() {
     mutate,
   } = useSWR(`/api/places/${id}`);
 
+  console.log("place: ", place);
   async function editPlace(place) {
-    console.log("place: ", place);
     // console.log("Place edited (but not really...)");
 
     try {
@@ -31,9 +31,9 @@ export default function EditPage() {
       if (response.ok) {
         // mutate(`/api/places/${id}`, place);
         mutate();
-        router.back();
+        router.back(); // Redirect to details page
 
-        router.push(`/places/${id}`); // Redirect to details page
+        // router.push(`/places/${id}`); // Also redirect to details page, but longer
       } else {
         throw new Error("Failed to update place");
       }
@@ -60,7 +60,7 @@ export default function EditPage() {
   // // ...test code ends.
 
   if (!isReady || isLoading) return <h2>Loading...</h2>;
-  if (error) return <h2>Error! </h2>;
+  if (error) return <h2 style={"text-align: center;"}>Error! </h2>;
 
   return (
     <>

@@ -2,14 +2,13 @@ import dbConnect from "../../../../db/connect";
 import Place from "../../../../db/models/Place";
 
 export default async function handler(request, response) {
+  await dbConnect(); // initializing the connection
   const { id } = request.query;
 
   if (!id) {
     // return response.status(404).json({ status: "Not found" });
     return;
   }
-
-  await dbConnect(); // initializing the connection
 
   if (request.method === "GET") {
     const place = await Place.findById(id);
