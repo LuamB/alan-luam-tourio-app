@@ -8,12 +8,8 @@ export default function EditPage() {
   const router = useRouter(); // Add redirection logic using useRouter
   const { isReady } = router;
   const { id } = router.query;
-  const {
-    data: { place }, // This variant assumes that the data from the API endpoint is structured with a data property at the top level, which in turn contains a  place object. Destructuring with { data: { place } } effectively pulls out the nested place object. Without destructuring (which is how it was earlier), it assumes that the data returned from the API endpoint  is the place object itself, without the additional outer data layer.
-    isLoading,
-    error,
-    mutate,
-  } = useSWR(`/api/places/${id}`);
+  const { data: place, isLoading, error, mutate } = useSWR(`/api/places/${id}`);
+  // This variant assumes that the data from the API endpoint is structured with a data property at the top level, which in turn contains a  place object. Destructuring with { data: { place } } effectively pulls out the nested place object. Without destructuring (which is how it was earlier), it assumes that the data returned from the API endpoint  is the place object itself, without the additional outer data layer.
 
   console.log("place: ", place);
   async function editPlace(place) {
@@ -68,7 +64,11 @@ export default function EditPage() {
       <Link href={`/places/${id}`} passHref legacyBehavior>
         <StyledLink justifySelf="start">back</StyledLink>
       </Link>
-      <Form onSubmit={editPlace} formName={"edit-place"} defaultData={place} />
+      <Form
+        onSubmit={editPlace}
+        formName={"edit-place"}
+        defaultData={place?.place} // if place obj exists, access place value, otherwise undefined
+      />
     </>
   );
 }
