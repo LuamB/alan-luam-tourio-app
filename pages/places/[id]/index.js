@@ -41,13 +41,16 @@ export default function DetailsPage() {
   } = useSWR(id ? `/api/places/${id}` : null); // if id is available, fetch the data, otherwise return null for id
   console.log("data: ", data);
 
-  // old version hidden out below:
-  // if (!isReady || isLoading || error) return <h2>Loading...</h2>;
   if (!isReady || isLoading) return <h2>Loading...</h2>;
   if (error) return <h2>Error! </h2>;
 
-  function deletePlace() {
-    console.log("deleted?");
+  async function deletePlace() {
+    if (confirm("Are you sure you want to delete this place?")) {
+      await fetch(`/api/places/${id}`, {
+        method: "DELETE",
+      });
+      router.push("/");
+    }
   }
 
   return (
